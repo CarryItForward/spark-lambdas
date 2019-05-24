@@ -7,13 +7,14 @@ provider:
   name: aws
   runtime: nodejs8.10
   region: us-west-2
+  profile: cif
 
 functions:
   hello:
     handler: src/handler.hello
     events:
       - http:
-          path: /hello
+          path: /hello/{name}
           method: get
           request:
             parameters:
