@@ -1,4 +1,4 @@
-service: spark-lambdas
+service: spark
 
 package:
   individually: true
@@ -8,26 +8,46 @@ provider:
   runtime: nodejs8.10
   region: us-west-2
   profile: cif
+  memorySize: 512
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 's3:*'
+      Resource: '*'
+  environment:
+    WEBSITE_BUCKET: spark.carryitforward.net
 
 functions:
-  hello:
-    handler: src/handler.hello
+  generateContent:
+    handler: src/handler.generateContent
     events:
       - http:
-          path: /hello/{name}
+          path: /gen/{name}
           method: get
           request:
             parameters:
               paths:
                 name: true
 
+#resources:
+#  Resources:
+#    WebsiteBucket:
+#      Type: AWS::S3::Bucket
+#      Properties:
+#        BucketName: ${self:provider.environment.WEBSITE_BUCKET}
+
 custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
     packager: 'yarn'
+  s3:
+    host: 0.0.0.0
+    port: 5353
+    directory: .s3
 
 plugins:
   - serverless-webpack
+  - serverless-s3-local
   - serverless-dynamodb-local
   - serverless-offline
