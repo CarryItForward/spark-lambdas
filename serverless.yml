@@ -15,7 +15,7 @@ provider:
         - 's3:*'
       Resource: '*'
   environment:
-    WEBSITE_BUCKET: spark.carryitforward.net
+    WEBSITE_BUCKET: dev-spark.carryitforward.net
 
 functions:
   generateContent:
@@ -29,12 +29,12 @@ functions:
               paths:
                 name: true
 
-#resources:
-#  Resources:
-#    WebsiteBucket:
-#      Type: AWS::S3::Bucket
-#      Properties:
-#        BucketName: ${self:provider.environment.WEBSITE_BUCKET}
+resources:
+  Resources:
+    WebsiteBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.WEBSITE_BUCKET}
 
 custom:
   webpack:
